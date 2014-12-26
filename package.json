@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/flipdot/android-app-backend",
   "dependencies": {
-    "express": "^4.10.6"
+    "express": "^4.10.6",
+    "forever": "^0.13.0",
+    "mongodb": "^1.4.26"
   }
 }
