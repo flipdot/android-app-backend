@@ -5,7 +5,7 @@ var express = require('express')
 var app = express()
 
 app.get('/', function (req, res) {
-  res.send('Hello World!')
+  res.redirect('https://play.google.com/store/apps/details?id=org.flipdot.flipdotapp')
 })
 
 var server = app.listen(PORT, HOST, function () {
