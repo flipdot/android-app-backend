@@ -33,7 +33,7 @@ function Notification() {
         return;
       }
 
-      callback();
+      if(callback) callback();
     })
   }
 
