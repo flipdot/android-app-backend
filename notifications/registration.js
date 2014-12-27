@@ -42,6 +42,7 @@ function Registration() {
         if(item) {
           log.warn('user '+userId+' alread exists');
           res.status(400).end('user already registed!');
+          return;
         }
 
         db.registrations.insert({
