@@ -12,15 +12,11 @@ db.on('connected', startWebserver);
 
 function startWebserver() {
   var app = express()
-  app.use(bodyParser.raw({
-    type: '*',
-    verify: function(req, res, buf, encoding) {
-      if(req.headers['Content-Type'] === 'application/json'){
-        throw 'use json parser';
-      }
+  app.use(bodyParser.json({
+    verify: function(req, res, buf, encoding){
+      req.rawBody = buf.toString();
     }
-  }));
-  app.use(bodyParser.json());
+  }))
 
   app.get('/', function (req, res) {
     res.redirect('https://play.google.com/store/apps/details?id=org.flipdot.flipdotapp')
