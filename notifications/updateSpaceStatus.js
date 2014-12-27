@@ -5,7 +5,7 @@ function UpdateSpaceStatus() {
 
   self.handleSpaceStatusChange = function(req, res) {
     var newStatus;
-    switch(req.rawBody) {
+    switch(req.body.status) {
       case 'open': {
         newStatus = 'open';
         break;
