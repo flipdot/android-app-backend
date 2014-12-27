@@ -13,7 +13,9 @@ db.on('connected', startWebserver);
 function startWebserver() {
   var app = express()
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded());
+  app.use(bodyParser.urlencoded({
+    extended: false
+  }));
 
   app.get('/', function (req, res) {
     res.redirect('https://play.google.com/store/apps/details?id=org.flipdot.flipdotapp')
