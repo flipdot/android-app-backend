@@ -4,6 +4,7 @@ var HOST = "0.0.0.0";
 var express = require('express')
 var bodyParser = require('body-parser')
 var db = require(__dirname+'/db');
+var isLocalRequest = require(__dirname+'/middleware/isLocalRequestMiddleware');
 var registration = require(__dirname+'/notifications/registration');
 
 db.on('connected', startWebserver);
