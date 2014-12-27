@@ -21,7 +21,8 @@ function UpdateSpaceStatus() {
     }
 
     var params = { newStatus: newStatus };
-    notification.sendToAll('spaceStatusChanged', params);
+    var timeToLive = 60 * 60 * 3; // 3h
+    notification.sendToAll('spaceStatusChanged', params, { timeToLive: timeToLive });
 
     res.end('ok');
   }
