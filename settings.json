@@ -3,5 +3,8 @@
     "url": "mongodb://localhost:27017/android-app-backend",
     "user": "",
     "password": ""
+  },
+  "gcm": {
+    "serverKey": ""
   }
 }

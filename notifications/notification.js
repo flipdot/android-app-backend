@@ -1,5 +1,6 @@
 var request = require('request');
 var db = require(__dirname+'/../db');
+var settings = require(__dirname+'/../settings');
 
 function Notification() {
   var self = this;
@@ -17,7 +18,11 @@ function Notification() {
       url: gcmUrl,
       method: 'POST',
       body: req,
-      json: true
+      json: true,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'key='+settings.gcm.serverKey
+      }
     }
 
     request(options, function(err, res, body){
