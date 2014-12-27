@@ -22,9 +22,10 @@ function UpdateSpaceStatus() {
 
     var params = { newStatus: newStatus };
     var timeToLive = 60 * 60 * 3; // 3h
-    notification.sendToAll('spaceStatusChanged', params, { timeToLive: timeToLive });
-
-    res.end('ok');
+    notification.sendToAll('spaceStatusChanged', params, { timeToLive: timeToLive },
+    function(){
+      res.end('ok');
+    });
   }
 }
 
