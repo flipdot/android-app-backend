@@ -48,7 +48,7 @@ function TapchatServer() {
 
   self.getBacklogMessages = function(callback) {
     var backlogReq = {
-      url: settings.tapchat.httpUrl+'/chat/backlog?cid='+serverId+'&bid='+channelId+'&num='+settings.tapchat.ircMsgNum+'&beforeid='+latestMsgId,
+      url: settings.tapchat.httpUrl+'/chat/backlog?cid='+serverId+'&bid='+channelId+'&num='+settings.tapchat.ircMsgNum+'&beforeid='+(latestMsgId+1), // +1 because the backlog should also contain the latest entry, which which otherwise be filtered out
       strictSSL: false,
       headers: {
         Cookie: 'session='+session
