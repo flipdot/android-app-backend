@@ -13,6 +13,7 @@
     "user": "",
     "password": ""
     "ircServer": "irc.freenode.net",
-    "flipdotChannel": "#flipdot"
+    "flipdotChannel": "#flipdot",
+    "ircMsgNum": 500
   }
 }

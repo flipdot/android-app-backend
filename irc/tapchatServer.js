@@ -11,8 +11,9 @@ function TapchatServer() {
   var socket = null;
   var session = null;
 
-  var serverId = null; // server id
-  var channelId = null; // channel id
+  var serverId = null;
+  var channelId = null;
+  var latestMsgId = null;
 
   self.connect = function(callback) {
     var loginReq = {
@@ -47,7 +48,7 @@ function TapchatServer() {
 
   self.getBacklogMessages = function(callback) {
     var backlogReq = {
-      url: settings.tapchat.httpUrl+'/chat/backlog?cid='+serverId,
+      url: settings.tapchat.httpUrl+'/chat/backlog?cid='+serverId+'&bid='+channelId+'&num='+settings.tapchat.ircMsgNum+'&beforeid='+latestMsgId,
       strictSSL: false,
       headers: {
         Cookie: 'session='+session
@@ -107,16 +108,19 @@ function TapchatServer() {
           channelId = tapchatEvent.bid;
         }
       }
-      else if(
-        tapchatEvent.type === 'buffer_msg' &&
-        !tapchatEvent.is_backlog){
-
-        var ircMsg = {
-          from: tapchatEvent.from,
-          time: tapchatEvent.time,
-          msg: tapchatEvent.msg
+      else if(tapchatEvent.type === 'buffer_msg'){
+        if(tapchatEvent.eid > latestMsgId){
+          latestMsgId = tapchatEvent.eid;
         }
-        self.emit('newMsg', ircMsg);
+
+        if(!tapchatEvent.is_backlog){
+          var ircMsg = {
+            from: tapchatEvent.from,
+            time: tapchatEvent.time,
+            msg: tapchatEvent.msg
+          }
+          self.emit('newMsg', ircMsg);
+        }
       }
     })
   }
