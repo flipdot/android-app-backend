@@ -12,5 +12,7 @@
     "wsUrl": "",
     "user": "",
     "password": ""
+    "ircServer": "irc.freenode.net",
+    "flipdotChannel": "#flipdot"
   }
 }

@@ -11,8 +11,10 @@ function TapchatServer() {
   var socket = null;
   var session = null;
 
-  self.connect = function(callback) {
+  var serverId = null; // server id
+  var channelId = null; // channel id
 
+  self.connect = function(callback) {
     var loginReq = {
       url: settings.tapchat.httpUrl+'/chat/login',
       strictSSL: false,
@@ -43,6 +45,42 @@ function TapchatServer() {
     })
   }
 
+  self.getBacklogMessages = function(callback) {
+    var backlogReq = {
+      url: settings.tapchat.httpUrl+'/chat/backlog?cid='+serverId,
+      strictSSL: false,
+      headers: {
+        Cookie: 'session='+session
+      }
+    }
+    request(backlogReq, function(err, res, body){
+      if(err) {
+        log.err(err);
+        return callback(err);
+      }
+
+      var backlogList = JSON.parse(body);
+
+      var ircMessages = [];
+
+      for(var i in backlogList) {
+        var entry = backlogList[i];
+
+        if(entry.chan === settings.tapchat.flipdotChannel) {
+          var ircMsg = {
+            from: entry.from,
+            time: entry.time,
+            msg: entry.msg
+          }
+          ircMessages.push(ircMsg);
+        }
+      }
+
+      callback(null, ircMessages);
+    })
+
+  }
+
   function initWebsockets(callback) {
     var wsUrl = settings.tapchat.wsUrl+'/chat/stream?inband=true';
     var wsOptions = {
@@ -58,8 +96,20 @@ function TapchatServer() {
 
     socket.on('message', function(data, flags){
       var tapchatEvent = JSON.parse(data);
-      if(tapchatEvent.type === 'buffer_msg' &&
-         !tapchatEvent.is_backlog){
+
+      if(tapchatEvent.type === 'makeserver') {
+        if(tapchatEvent.name === settings.tapchat.ircServer){
+          serverId = tapchatEvent.cid;
+        }
+      }
+      else if(tapchatEvent.type === 'makebuffer') {
+        if(tapchatEvent.name === settings.tapchat.flipdotChannel){
+          channelId = tapchatEvent.bid;
+        }
+      }
+      else if(
+        tapchatEvent.type === 'buffer_msg' &&
+        !tapchatEvent.is_backlog){
 
         var ircMsg = {
           from: tapchatEvent.from,
@@ -76,4 +126,11 @@ util.inherits(TapchatServer, require('events').EventEmitter);
 
 module.exports = new TapchatServer();
 
-module.exports.connect();
+// test code
+module.exports.connect(function(){
+  setTimeout(function(){
+    module.exports.getBacklogMessages(function(err, msgs){
+      console.log(msgs);
+    });
+  },1500);
+});
