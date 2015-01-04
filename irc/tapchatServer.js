@@ -125,12 +125,3 @@ function TapchatServer() {
 util.inherits(TapchatServer, require('events').EventEmitter);
 
 module.exports = new TapchatServer();
-
-// test code
-module.exports.connect(function(){
-  setTimeout(function(){
-    module.exports.getBacklogMessages(function(err, msgs){
-      console.log(msgs);
-    });
-  },1500);
-});
