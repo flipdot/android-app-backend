@@ -6,5 +6,11 @@
   },
   "gcm": {
     "serverKey": ""
+  },
+  "tapchat": {
+    "httpUrl": "",
+    "wsUrl": "",
+    "user": "",
+    "password": ""
   }
 }
