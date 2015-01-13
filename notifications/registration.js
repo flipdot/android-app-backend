@@ -26,27 +26,25 @@ function Registration() {
       }
 
       var username = tokenInfo.email;
-      var userId = tokenInfo.issued_to;
 
-      if(!username || !userId){
+      if(!username){
         log.err('invalid respose from google oAuth api!');
         return;
       }
 
-      db.registrations.findOne({userId: userId}, function(err, item){
+      db.registrations.findOne({username: username}, function(err, item){
         if(err) {
           log.err('database error: '+err);
           return;
         }
 
         if(item) {
-          log.warn('user '+userId+' alread exists');
+          log.warn('user '+username+' alread exists');
           res.status(400).end('user already registed!');
           return;
         }
 
         db.registrations.insert({
-          userId: userId,
           username: username,
           gcmId: gcmId
         }, function(err){
